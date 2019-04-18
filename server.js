@@ -32,13 +32,32 @@ app.engine('handlebars', exphbs({
 app.set('view engine', 'handlebars');
 
 
+// set up mongoose to leverage built-in JavaScript ES6 Promises
+mongoose.Promise = Promise;
+// if deployed, use the deployed database. else, use the local mongoHeadlines database.
+var MONGODB = process.env.MONGODB || 'mongodb://localhost:27017/webScraper';
+// connect to the MongoDB
+mongoose.connect(MONGODB, { useNewUrlParser: true })
+.then(function(){
+    console.log('Successfully connected to Mongo database');
+})
+.catch(function(err) {
+    console.error(err);
+});
+
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/webScraper", { useNewUrlParser: true });
+// mongoose.connect("mongodb://localhost:27017/webScraper", { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
+// Replace update() with updateOne(), updateMany(), or replaceOne()
+// Replace remove() with deleteOne() or deleteMany().
+// Replace count() with countDocuments(), unless you want to count how many documents are in the whole collection (no filter). In the latter case, use estimatedDocumentCount().
 
 // Import routes and give the server access to them.
 var routes = require("./controller/controller.js");
-app.use('/', routes);
+app.use(routes);
 
 // Start the server
 app.listen(PORT, function() {

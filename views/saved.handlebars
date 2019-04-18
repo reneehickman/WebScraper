@@ -1,0 +1,52 @@
+	<header class="header">
+
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+  <a class="navbar-brand" href="/">NHL Post</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/articles/saved">Saved Articles<span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+	</header>
+
+<div class="jumbotron text-center">
+        <h1>Saved Articles!</h1>
+</div>
+
+<div class="container articles-div">
+    {{#each articles}}
+        <div class="card card-default">
+            <div class="card-heading">
+                <h3>
+                    <a href="{{this.link}}" target="_blank" class="article-link">{{this.title}}</a>
+                </h3>
+                {{#if this.saved}}
+                    <button type="button" class="btn btn-default saved" data-id="{{this._id}}" disabled>Saved</button>
+                {{else}}
+                    <button type="button" class="btn btn-default save-article-btn" data-id="{{this._id}}" data-toggle="modal" data-target="#saveModal">Save</button>
+                {{/if}}
+            </div>
+            <div class="card-body">
+                <p>Source: <a href="https://{{this.site}}" target="_blank">{{this.site}}</a></p>
+            </div>
+        </div>
+    {{/each}}
+</div>
+
+
+<div class="footer">
+		This is footer
+<form action="https://github.com/reneehickman/burger" id="github">
+    <button type="submit" value="GitHub Repo" class="btn btn-info btn-sm">Github Repo</button>
+</form>
+</div>
