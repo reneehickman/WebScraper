@@ -33,9 +33,9 @@
 <div class="container articles" id="articles">
     {{#each articles}}
      {{!-- {{#unless saved}} --}}
-        <div class="card mb-3">
+        <div class="card mb-3 cardz">
             <div class="card-body">
-              <img src="{{this.image}}">
+              <img class="img-fluid" src="{{this.image}}">
                 <h3 class="card-title">
                     <a href="{{this.link}}" target="_blank" class="article-link">{{this.title}}</a>
                 </h3>
@@ -45,7 +45,7 @@
                 {{else}}
                 <form class="form-inline" action="articles/{{this.id}}" method="POST">
                  <input type="hidden" name="saved" value="1">
-                    <button type="button" class="btn btn-default save-article-btn" data-id="{{this._id}}">Save</button>
+                    <button type="button" class="btn btn-block btn-default save-article-btn" data-id="{{this._id}}">Save Article</button>
                     </form>
                 {{/if}}
             </div>
@@ -55,9 +55,3 @@
 </div>
 
 
-<div class="footer">
-		This is footer
-<form action="https://github.com/reneehickman/burger" id="github">
-    <button type="submit" value="GitHub Repo" class="btn btn-info btn-sm">Github Repo</button>
-</form>
-</div>

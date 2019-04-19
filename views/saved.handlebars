@@ -23,30 +23,30 @@
         <h1>Saved Articles!</h1>
 </div>
 
-<div class="container articles-div">
+<div class="container articles" id="articles">
     {{#each articles}}
-        <div class="card card-default">
-            <div class="card-heading">
-                <h3>
+     {{!-- {{#unless saved}} --}}
+        <div class="card mb-3 cardz">
+            <div class="card-body">
+              <img class="img-fluid" src="{{this.image}}">
+                <h3 class="card-title">
                     <a href="{{this.link}}" target="_blank" class="article-link">{{this.title}}</a>
                 </h3>
-                {{#if this.saved}}
-                    <button type="button" class="btn btn-default saved" data-id="{{this._id}}" disabled>Saved</button>
-                {{else}}
-                    <button type="button" class="btn btn-default save-article-btn" data-id="{{this._id}}" data-toggle="modal" data-target="#saveModal">Save</button>
-                {{/if}}
-            </div>
-            <div class="card-body">
-                <p>Source: <a href="https://{{this.site}}" target="_blank">{{this.site}}</a></p>
+                <p class="card-text">{{this.intro}}</p>
+
+                    <form class="form-inline" action="articles/{{this.id}}" method="POST">
+                 <input type="hidden" name="saved" value="1">
+                    <button type="button" class="btn btn-default comments-btn" data-id="{{this._id}}">Article Comments</button>
+                    </form>
+
+                <form class="form-inline" action="articles/{{this.id}}" method="POST">
+                 <input type="hidden" name="saved" value="1">
+                    <button type="button" class="btn btn-default remove-btn" data-id="{{this._id}}">Remove from Saved</button>
+                    </form>
+
             </div>
         </div>
+      {{!-- {{/unless}} --}}
     {{/each}}
 </div>
 
-
-<div class="footer">
-		This is footer
-<form action="https://github.com/reneehickman/burger" id="github">
-    <button type="submit" value="GitHub Repo" class="btn btn-info btn-sm">Github Repo</button>
-</form>
-</div>

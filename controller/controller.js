@@ -15,18 +15,18 @@ app.get('/', function (req, res) {
 
 
 //Route for getting all Articles from the db
-app.get('/articles', function(req, res) {
-  db.Article.find({saved:false}).sort({_id: 1})
-  .then(function(articles) {
-    console.log(articles);
-    let hbsObj = {
-    articles:articles
-    };
+app.get('/articles', function (req, res) {
+  db.Article.find({ saved: false }).sort({ _id: 1 })
+    .then(function (articles) {
+      console.log(articles);
+      let hbsObj = {
+        articles: articles
+      };
       res.render('index', hbsObj);
-  })
-  .catch(function(err) {
+    })
+    .catch(function (err) {
       console.log(err);
-  });
+    });
 });
 
 
@@ -45,42 +45,66 @@ app.get('/api/articles', function (req, res) {
 // // A GET route for scraping the nhl website
 app.get("/articles/scrape", function (req, res) {
 
-  axios.get("https://www.nhl.com/news").then(function (response) {
+  axios.get("https://www.nhl.com/").then(function (response) {
     console.log("Load Response");
 
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
-  
-    $(".article-item").each(function (i, element) {
-      
+
+    $("li.mixed-feed__item.mixed-feed__item--article").each(function (i, element) {
+
       // Initialize Empty Object to Store Cheerio Objects
       var result = {};
 
+      var img = $(this).children('.mixed-feed__item-content')
+      .children('.mixed-feed__content')
+      .children('a')
+      .children('.mixed-feed__media')
+      .children('.mixed-feed__media-overlay--article')
+      .children('div')
+      .children('.mixed-feed__img-article')
+      .attr('data-srcset').slice(41, 50);
+
       // var imgLink = 'https://nhl.bamcontent.com/images/photos/' + '/1024x576/cut.jpg'
       // Store Scrapped Data into result object
-      result.title = $(this).children('.article-item__top').children('h1').text();
-      result.intro = $(this).children('.article-item__top').children('h2').text();
-      result.link = $(this).attr('data-url');
-      result.image = $(this).children('.article-item__img-container').children('img').attr('src');
+      result.title = $(this).children('.mixed-feed__item-content')
+      .children('.mixed-feed__content')
+      .children('.mixed-feed__social')
+      .children('.mixed-feed__share')
+      .attr('data-share-title');
+      result.intro = $(this)
+      .children('.mixed-feed__item-header')
+      .children('.mixed-feed__item-header-text')
+      .children('a')
+      .children('h5')
+      .text();
+      result.link = "https://www.nhl.com" + $(this).children('.mixed-feed__item-content')
+      .children('.mixed-feed__content')
+      .children('.mixed-feed__social')
+      .children('.mixed-feed__share')
+      .attr('data-share-url');
+      result.image = "https://nhl.bamcontent.com/images/photos/" + img + "/960x540/cut.jpg";
       result.comments = null;
+                                                            
 
       console.log(result);
+      // console.log(result.image);
 
       db.Article.create(result)
         .then(function (dbArticle) {
           console.log(dbArticle)
+          res.redirect("/articles");
         })
         .catch(function (err) {
-        //  res.json(err);
-          console.log(err);
+          //  res.json(err);
+          // console.log(err);
           // return res.json(err);
         })
     });
     res.redirect("/articles");
   })
 });
-
 
 
 // Route for getting all saved Articles from the db
