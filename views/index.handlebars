@@ -1,6 +1,6 @@
 	<header class="header">
 
-<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+<nav class="navbar navbar-expand-lg navbar-dark head">
   <a class="navbar-brand" href="/">NHL Post</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,13 +20,12 @@
   </div>
 </nav>
 	</header>
-
-<div class="jumbotron text-center">
-    <div>
-        <h1>Read the latest on NHL news!</h1>
+<div class="jumbotron text-center tron">
+    <div class="inside">
+        <h1>Read the latest NHL news!</h1>
         <p>Click 'Scrape' to get the latest articles</p>
          <form action="/articles/scrape" method="GET">
-    <button id="scrape-btn" class="btn btn-secondary">Scrape New Articles</button></form>
+    <button id="scrape-btn" class="btn btn-warning">Scrape New Articles</button></form>
     </div>
 </div>
 
@@ -43,9 +42,9 @@
                 {{#if this.saved}}
                     <button type="button" class="btn btn-default saved" data-id="{{this._id}}" disabled>Saved</button>
                 {{else}}
-                <form class="form-inline" action="articles/{{this.id}}" method="POST">
+                <form class="form-inline" action="/save/{{this.id}}" method="POST">
                  <input type="hidden" name="saved" value="1">
-                    <button type="button" class="btn btn-block btn-default save-article-btn" data-id="{{this._id}}">Save Article</button>
+                    <button type="submit" class="btn btn-block btn-warning save-article-btn" data-id="{{this._id}}">Save Article</button>
                     </form>
                 {{/if}}
             </div>

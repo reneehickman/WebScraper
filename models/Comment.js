@@ -12,8 +12,7 @@ var CommentSchema = new Schema({
   },
   // `body` is required and is of type String
   body: {
-    type: String,
-    required: true
+    type: String
   },
 });
 
