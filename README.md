@@ -11,9 +11,9 @@ Click [here]( ) to view the deployed app on Heroku.
 4. Run the app in `localhost:3000` in your browser. ("http://localhost:3000")
 
 ## Screen Shots
-![screenshot](screenshot.jpg)
+![screenshot](screenshot.JPG)
 ---
-![screenshot2](screenshot2.jpg)
+![screenshot2](screenshot2.JPG)
 
 ## Technology/Dependencies 
 * JavaScript: https://www.javascript.com/
