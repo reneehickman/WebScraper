@@ -35,9 +35,9 @@ app.set('view engine', 'handlebars');
 // set up mongoose to leverage built-in JavaScript ES6 Promises
 mongoose.Promise = Promise;
 // if deployed, use the deployed database. else, use the local database.
-var MONGODB = process.env.MONGODB || 'mongodb://localhost/webScraper';
+var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/webScraper';
 // connect to the MongoDB
-mongoose.connect(MONGODB, { useNewUrlParser: true })
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
 .then(function(){
     console.log('Successfully connected to Mongo database');
 })

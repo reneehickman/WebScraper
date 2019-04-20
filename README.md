@@ -2,7 +2,7 @@
 
 NHL Post is a full stack application that lets users scrape news articles from NHL.com. Users can save articles and then are given the option to view and add commments to those saved articles. The user also has the option to remove an article from the saved articles. This `Express` app uses the `MVC design` pattern, `Cheerio` to scrape news articles from NHL.com, `Mongoose` to store data in `MongoDB` and `Handlebars` to generate the HTML. 
 
-Click [here]( ) to view the deployed app on Heroku.
+Click [here](https://infinite-headland-42888.herokuapp.com/) to view the deployed app on Heroku.
 
 ## Local Deployment
 1. Clone repo and run `npm install` to download app dependencies.
