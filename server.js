@@ -51,9 +51,6 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
-// Replace update() with updateOne(), updateMany(), or replaceOne()
-// Replace remove() with deleteOne() or deleteMany().
-// Replace count() with countDocuments(), unless you want to count how many documents are in the whole collection (no filter). In the latter case, use estimatedDocumentCount().
 
 // Import routes and give the server access to them.
 var routes = require("./controller/controller.js");

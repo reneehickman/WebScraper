@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
 
 //Route for getting all Articles from the db
 app.get('/articles', function (req, res) {
-  db.Article.find({ saved: false }).sort({ _id: 1 })
+  db.Article.find({ saved: false }).sort({ _id: -1 })
     .then(function (articles) {
       // console.log(articles);
       let hbsObj = {
@@ -90,10 +90,6 @@ app.get("/articles/scrape", function (req, res) {
       .children('.mixed-feed__social')
       .children('.mixed-feed__share')
       .attr('data-share-url');
-      // result.image = "https://nhl.bamcontent.com/images/photos/" + img + "/960x540/cut.jpg";
-      // if (result.image){
-      //   img = img.slice(41, 50);
-      // }
       
       // result.image = "https://nhl.bamcontent.com/images/photos/" + img.slice(41, 50) + "/960x540/cut.jpg";
       result.comments = null;    
@@ -120,7 +116,7 @@ app.get("/articles/scrape", function (req, res) {
 app.get("/articles/saved", function (req, res) {
   // Grab every document in the Articles collection
   db.Article.find({ saved: true })
-  .populate('Comment')
+  .populate('comment')
     .then(function (dbArticleSaved) {
       // If we were able to successfully find Articles, send them back to the client
       // res.json(dbArticle);
@@ -168,42 +164,51 @@ app.post('/unsave/:id', function(req, res) {
 
 
 
-// add a Comment to a saved article
-app.post('/articles/:id', function(req, res) {
-  let newComment = new Comment(req.body);
-  newComment.save(function(err, doc) {
-      if (err) {
-          console.log(err);
-          res.status(500);
-      } else {
-          db.Article.findOneAndUpdate(
-              { _id: req.params.id },
-              { $push: { 'Comment': doc.id } },
-              function(error, newDoc) {
-                  if (error) {
-                      console.log(error);
-                      res.status(500);
-                  } else {
-                      res.redirect('/articles/saved');
-                  }
-              }
-          );
+// Route to see comments we have added
+app.get("/articles/saved", function (req, res) {
+  // Find all comments in the comment collection with our Comment model
+  db.Comment.find({}, function (error, doc) {
+      // Send any errors to the browser
+      if (error) {
+          res.send(error);
+      }
+      // Or send the doc to the browser
+      else {
+          res.json(doc);
       }
   });
 });
 
-
 // Route for grabbing a specific Article by id, populate it with it's comment
-app.get("/articles/:id", function(req, res) {
+app.get("/articles/saved", function(req, res) {
   db.Article.findOne({ _id: req.params.id })
-    .populate("Comment")
+    .populate("comment")
     .then(function(dbArticle) {
       res.json(dbArticle);
     })
     .catch(function(err) {
-      res.json(err);
+     console.log(err);
     });
 });
+
+// Route for saving/updating an Article's associated Comment
+app.post("/articles/comments/:id", function(req, res) {
+  // Create a new comment and pass the req.body to the entry
+  db.Comment.create(req.body)
+    .then(function(dbComment) {
+     return db.Article.findOneAndUpdate({ _id: req.params.id }, {$push: {'comment' : dbComment._id }}, { new: true });
+    })
+    .then(function(dbArticle) {
+      // If we were able to successfully update an Article, send it back to the client
+      // res.send(dbArticle);
+      res.redirect('/articles/saved');
+    })
+    .catch(function(err) {
+      // If an error occurred, send it to the client
+      console.log(err);
+    });
+});
+
 
 // delete a Comment from a saved article
 app.delete('/articles/comments/:id', function(req, res) {
@@ -217,77 +222,6 @@ app.delete('/articles/comments/:id', function(req, res) {
   });
 });
 
-
-
-
-
-
-
-
-// app.delete('/articles/delete', function (req, res) {
-//   db.Article.remove({})
-//     .then(function (response) {
-//       return db.Comment.remove({});
-//     })
-//     .then(function (commentResponse) {
-//       console.log('Articles removed!');
-//       res.send('Articles removed!');
-//     })
-//     .catch(function (err) {
-//       console.log(err);
-//       res.send(err);
-//     });
-// });
-
-
-// // Route for grabbing a specific Article by id, populate it with it's Comment
-// app.get("/articles/:id", function (req, res) {
-//   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-//   db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: true }, { new: true })
-//     // ..and populate all of the Comments associated with it
-//     .populate("Comment")
-//     .then(function (dbArticle) {
-//       // If we were able to successfully find an Article with the given id, send it back to the client
-//       res.send(dbArticle);
-//       res.redirect('/articles');
-//     })
-//     .catch(function (err) {
-//       // If an error occurred, send it to the client
-//       console.error(err);
-//     });
-// });
-
-// // Route for saving/updating an Article's associated Comment
-// app.post("/articles/:id", function (req, res) {
-//   // Create a new Comment and pass the req.body to the entry
-//   db.Comment.create(req.body)
-//     .then(function (dbComment) {
-//       console.log(dbComment);
-//       // If a Comment was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Comment
-//       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-//       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-//       return db.Article.findOneAndUpdate({ _id: req.params.id }, { Comment: dbComment._id }, { new: true });
-//     })
-//     .then(function (dbArticle) {
-//       // If we were able to successfully update an Article, send it back to the client
-//       res.send(dbArticle);
-//     })
-//     .catch(function (err) {
-//       // If an error occurred, send it to the client
-//       console.log(err);
-//     });
-// });
-
-// app.get('remove/:id', function (req, res) {
-//   db.Article.findOneAndUpdate({ _id: req.params.id }, { $unset: { comment: '', saved: '' } }, { new: true })
-//     .then(function (remove) {
-//       console.log(`article ${remove._id} saved: ${remove.saved}`);
-//       res.send(remove);
-//     })
-//     .catch(function (err) {
-//       console.error(err);
-//     });
-// });
 
 
 
