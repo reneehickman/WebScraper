@@ -61,9 +61,9 @@
 <div class="modal fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header modhead">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Comments for <div class="modtitle">{{this.title}}</div></h4>
+                <h4 class="modal-title" id="myModalLabel">Comments for: <div class="modtitle">{{this.title}}</div></h4>
             </div>
             <div class="modal-body">
                 {{#if comment}}
@@ -90,15 +90,19 @@
                         </div>
                 {{/if}}
             </div>
+
+
             <div class="modal-footer modfoot">
-
-
+                    <div class="row"><h5 class="addcomment">Add a Comment:</h5></div>
+               
     
                         <form class="form-inline w-100" action="/articles/comments/{{this._id}}" method="POST">
                         <input type="text" class="form-control w-100 mb-2" id="name" name="name" placeholder="Your Name">
                         <textarea id="textarea-char-counter" id="text" name="text" placeholder="Add a new comment..." class="form-control md-textarea w-100" length="120" rows="3"></textarea>
                             <button type="submit" class="btn btn-warning">Add Comment</button>
                         </form>
+
+                      
     
             </div>
             <button type="button" class="btn btn-mdb-color" data-dismiss="modal">Close</button>

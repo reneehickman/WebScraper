@@ -122,9 +122,36 @@ font-weight:bold;
     }
 
 .modtitle{
-    font-weight:bold;
+    font-weight:normal;
     text-align: left;
 }    
+
+.modhead{
+    margin:0px auto;
+    display:unset;
+    text-align:left;
+    width:100%;
+}
+
+.bodymod{
+    text-align:left;
+}
+
+.modal-title{
+font-weight:bold;
+}
+
+.modal-footer{
+    display:unset;
+    padding-top:30px;
+}
+
+.addcomment{
+    padding-left:15px;
+    font-weight:bold;
+    margin:0px auto;
+    padding-bottom:10px;
+  }
 
 @media (max-width:992px) {
 
