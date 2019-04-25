@@ -115,7 +115,7 @@ app.get("/articles/scrape", function (req, res) {
 // Route for getting all saved Articles from the db
 app.get("/articles/saved", function (req, res) {
   // Grab every document in the Articles collection
-  db.Article.find({ saved: true })
+  db.Article.find({ saved: true }).sort({ _id: -1 })
   .populate('comment')
     .then(function (dbArticleSaved) {
       // If we were able to successfully find Articles, send them back to the client
@@ -146,7 +146,7 @@ app.post('/save/:id', function(req, res) {
       });
 });
 
-// save an article
+// unsave an article
 app.post('/unsave/:id', function(req, res) {
   db.Article.findByIdAndUpdate(req.params.id, {
       $set: { saved: false}
